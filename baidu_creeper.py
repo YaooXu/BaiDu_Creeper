@@ -20,7 +20,17 @@ api1 = url2io.API('HMTEF2G9SzySmZ7DAWN0Rw')
 api2 = url2io.API('yCnOWq_vTfSd7svSDH5f9Q')
 
 
-def creeper(word):
+def creeper(word, num=5):
+    '''
+
+    :param word: 爬取关键字
+    :param num: 要爬取的网页数量
+    :return:
+        titles: 文章标题
+        abstracts:  摘要
+        links:  链接
+        contents:  主要内容
+    '''
     st = time.time()
 
     titles = []  # 文章标题
@@ -28,7 +38,7 @@ def creeper(word):
     links = []  # 链接
     contents = []  # 主要内容
 
-    for pn in range(0, 1):
+    for pn in range(0, 10):
         url = 'http://www.baidu.com.cn/s?wd=' + urllib.parse.quote(word) + '&pn={:d}'.format(
             pn * 10)  # word为关键词，pn是百度用来分页的..
         headers = {
@@ -95,7 +105,7 @@ def creeper(word):
                     abstracts.append(abstract)
                     contents.append(content)
 
-            if len(contents) >= 5:
+            if len(contents) >= num:
                 break
 
     ed = time.time()
