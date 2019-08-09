@@ -1,3 +1,5 @@
+# encoding=utf-8
+
 import re
 import bs4
 import time
@@ -7,6 +9,9 @@ from functools import reduce
 import lxml
 import requests
 import url2io
+import json
+import jieba
+
 
 tpl_list = [
     'se_com_default',  # 默认其他网站
@@ -39,6 +44,9 @@ def creeper(word, num=5):
     contents = []  # 主要内容
 
     for pn in range(0, 10):
+        if len(contents) >= num:
+            break
+
         url = 'http://www.baidu.com.cn/s?wd=' + urllib.parse.quote(word) + '&pn={:d}'.format(
             pn * 10)  # word为关键词，pn是百度用来分页的..
         headers = {
@@ -114,4 +122,16 @@ def creeper(word, num=5):
 
 
 if __name__ == '__main__':
-    links, titles, abstracts, contents = creeper("感冒怎么办")
+    question = "怎么种多肉"
+    question_id = 1
+    links, titles, abstracts, contents = creeper(question)
+    with open('.\\res.json', 'w', encoding='utf8') as f:
+        for content in contents:
+            python2json = {}
+            python2json['question_id'] = question_id
+            python2json['question'] = question
+            seg_list = jieba.cut(content)
+            doc_tokens = ", ".join(seg_list)
+            python2json['doc_tokens'] = doc_tokens
+            f.write(json.dumps(python2json, ensure_ascii=False))
+            f.write('\n')
