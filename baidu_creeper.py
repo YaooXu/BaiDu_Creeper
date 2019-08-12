@@ -51,13 +51,14 @@ def creeper(word, num=5):
             pn * 10)  # word为关键词，pn是百度用来分页的..
         headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Encoding': 'gzip, deflate, compress',
+            # 'Accept-Encoding': 'gzip, deflate, compress',
             'Accept-Language': 'en-us;q=0.5,en;q=0.3',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
             'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0'
         }  # 定义头文件，伪装成浏览器
-        page = urllib.request.urlopen(url)
+        req = urllib.request.Request(url, headers=headers)
+        page = urllib.request.urlopen(req)
         soup = BeautifulSoup(page.read().decode('utf8'), 'lxml')
 
         content = soup.find('div', {'id': 'content_left'})
@@ -122,7 +123,7 @@ def creeper(word, num=5):
 
 
 if __name__ == '__main__':
-    question = "怎么种多肉"
+    question = "香港暴乱原因"
     question_id = 1
     links, titles, abstracts, contents = creeper(question)
     with open('.\\res.json', 'w', encoding='utf8') as f:
