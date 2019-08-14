@@ -130,6 +130,7 @@ if __name__ == '__main__':
         for content in contents:
             python2json = {}
             python2json['question_id'] = question_id
+            question_id += 1
             python2json['question'] = question
             seg_list = jieba.cut(content)
             doc_tokens = ", ".join(seg_list)
